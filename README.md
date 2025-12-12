@@ -1,10 +1,9 @@
 # RNAseq_Analysis
-*Basic RNAseq workflow with the following organisation*
+*Basic RNAseq analysis workflow*
 
 
 ## A - PREPROCESSING 
-### Structure de dossiers pour l’analyse FastQC
-
+### *File organisation for FastQC analysis*
 project_name/  
 📁 raw_data/             – fichiers bruts (.fastq.gz)  
 📁 trimmed_data/         – fichiers après trimming  
