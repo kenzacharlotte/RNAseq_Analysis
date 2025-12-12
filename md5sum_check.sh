@@ -12,8 +12,11 @@ comm -12 <(awk '{print $1}' fastqc_results/raw/md5sum/md5sum_copied.txt | sort) 
          <(awk '{print $1}' fastqc_results/raw/md5sum/md5sum_check.txt | sort) \
 | wc -l >> logs/md5sum.out
 
+echo "over:" >> logs/md5sum.out
+wc -l fastqc_results/raw/md5sum/md5sum_check.txt >> logs/md5sum.out
+
 # 4. Listing of the non-similar files
-echo "If error, non similar files:" >> md5sum.out
+echo "If error, non similar files:" >> logs/md5sum.out
 comm -23 <(awk '{print $1}' fastqc_results/raw/md5sum/md5sum_copied.txt | sort) \
          <(awk '{print $1}' fastqc_results/raw/md5sum/md5sum_check.txt | sort) \
 | while read md5; do
