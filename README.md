@@ -1,5 +1,15 @@
 # RNAseq_Analysis
-Basic RNAseq workflow 
+Basic RNAseq workflow with the following organisation
+
+project_name/
+├── raw_data/             # tes fichiers bruts (.fastq.gz)
+├── trimmed_data/         # fichiers après trimming (Trimmomatic ou autre)
+├── fastqc_results/       # résultats FastQC bruts
+│   ├── raw/              # FastQC sur les fichiers bruts
+│   └── trimmed/          # FastQC sur les fichiers trimmed
+├── multiqc_results/      # résultats MultiQC (rapports combinés)
+├── logs/                 # fichiers log des différentes étapes
+└── scripts/              # tes scripts bash / Python
 
 A - PREPROCESSING #################################
 ###1 - Receive the fastq from a sequencing commpagny
