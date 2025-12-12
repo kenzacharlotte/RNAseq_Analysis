@@ -5,16 +5,15 @@
 ## A - PREPROCESSING 
 ### Structure de dossiers pour l’analyse FastQC
 
-project_name/
-📁 raw_data/             – fichiers bruts (.fastq.gz)
-📁 trimmed_data/         – fichiers après trimming
-📁 fastqc_results/       – résultats FastQC
-   📁 raw/               – FastQC sur fichiers bruts
-   📁 trimmed/           – FastQC sur fichiers trimmed
-📁 multiqc_results/      – résultats MultiQC
-📁 logs/                 – fichiers log
-📁 scripts/              – scripts bash / Python
-
+project_name/  
+📁 raw_data/             – fichiers bruts (.fastq.gz)  
+📁 trimmed_data/         – fichiers après trimming  
+📁 fastqc_results/       – résultats FastQC  
+   📁 raw/               – FastQC sur fichiers bruts  
+   📁 trimmed/           – FastQC sur fichiers trimmed  
+📁 multiqc_results/      – résultats MultiQC  
+📁 logs/                 – fichiers log  
+📁 scripts/              – scripts bash / Python  
 
 ###1 - Receive the fastq from a sequencing commpagny
 Create a directory containing all the fastq and compare md5sum with bash code
