@@ -1,5 +1,5 @@
 # RNAseq_Analysis
-Basic RNAseq workflow with the following organisation
+*Basic RNAseq workflow with the following organisation*
 
 project_name/
 ├── raw_data/             # tes fichiers bruts (.fastq.gz)
