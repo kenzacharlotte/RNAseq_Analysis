@@ -3,6 +3,9 @@
 
 
 ## A - PREPROCESSING 
+```py
+create_repository.sh
+```
 ### *File organisation for FastQC analysis*
 project_name/  
 📁 raw_data/             – fichiers bruts (.fastq.gz)  
