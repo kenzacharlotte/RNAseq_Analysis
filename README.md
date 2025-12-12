@@ -14,6 +14,7 @@ project_name/
 📁 trimmed_data/         – fichiers après trimming  
 📁 fastqc_results/       – résultats FastQC  
    📁 raw/               – FastQC sur fichiers bruts  
+       📁 md5sum/        – md5sum files check and copied  
    📁 trimmed/           – FastQC sur fichiers trimmed  
 📁 multiqc_results/      – résultats MultiQC  
 📁 logs/                 – fichiers log  
