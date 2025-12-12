@@ -1,9 +1,8 @@
 # RNAseq_Analysis
 *Basic RNAseq analysis workflow*
 
-
 ## A - PREPROCESSING 
-##### *Organize your files*
+##### *Structure*
 
 ```py
 create_repository.sh
@@ -20,16 +19,20 @@ project_name/
 📁 logs/                 – fichiers log  
 📁 scripts/              – scripts bash / Python
 ```
-
+##### *Md5sum*
 ```py
 md5sum_check.sh
 ```
+- creates md5sum of the copied fastq
+- check if the md5sum are matching in `md5sum.out`
+- writes in `md5sum.out` the files that are not matching
 
-###1 - Receive the fastq from a sequencing commpagny
-Create a directory containing all the fastq and compare md5sum with bash code
-
-###2 - Quality check #################################
-Controle the quality sequencing with fastqc
+##### *Quality check*
+```py
+qualitycheck_fastqc.sh
+```
+- run fastqc for all raw data (*fq.gz)
+- creates html files 
 
 ###3 - Trimming (optionnal)
 
