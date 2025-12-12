@@ -32,13 +32,14 @@ md5sum_check.sh
 qualitycheck_fastqc.sh
 ```
 - run fastqc for all raw data (*fq.gz)
-- creates html files 
+- creates html report for each fastq with
+For more informations about fastqc check https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 
-###3 - Trimming (optionnal)
+##### *Trimming (optionnal)*
+To be continued...
 
-B - PROCESSING #################################
-###1 - Alignment with STAR
+## B - PROCESSING 
+##### *Alignment - STAR*
+##### *Counting features - HTSeqcount*
 
-###2 - Counting features with HTSeqcount
-
-C - STATISTICAL ANALYSIS #################################
+## C - Statistical analysis 
