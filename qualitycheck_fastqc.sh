@@ -1,6 +1,6 @@
-#!/bin/sh
-
 #!/bin/bash
+echo "Processing fastqc..." >> logs/fastqc_results.out
 
-mkdir -p ~/fastqc_results
-fastqc $(find . -name "*.fq.gz") -o ~/fastqc_results
+fastqc $(find raw_data/ -name "*.fq.gz") -o fastqc_results/raw
+
+echo "Successfully fasqchecked :)" >> logs/fastqc_results.out
