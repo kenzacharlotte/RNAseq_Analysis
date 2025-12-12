@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create md5sum files 
-md5sum *fq.gz > md5sum_copied.txt
+md5sum fastqc_results/raw/*fq.gz > md5sum/md5sum_copied.txt
 
 # Print the md5sum that are identical 
 comm -12 <(awk '{print $1}' md5sum_copied.txt | sort) <(awk '{print $1}' info/md5sum_check.txt | sort) 
