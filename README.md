@@ -8,7 +8,7 @@
 ```py
 create_repository.sh
 ```
-
+```
 project_name/  
 📁 raw_data/             – fichiers bruts (.fastq.gz)  
 📁 trimmed_data/         – fichiers après trimming  
@@ -18,7 +18,8 @@ project_name/
    📁 trimmed/           – FastQC sur fichiers trimmed  
 📁 multiqc_results/      – résultats MultiQC  
 📁 logs/                 – fichiers log  
-📁 scripts/              – scripts bash / Python  
+📁 scripts/              – scripts bash / Python
+```
 
 ```py
 md5sum_check.sh
