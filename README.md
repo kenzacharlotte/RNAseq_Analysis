@@ -36,7 +36,6 @@ qualitycheck_fastqc.sh
 For more informations about fastqc check https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 
 ##### *Trimming (optionnal)*
-To be continued...
 
 ## B - PROCESSING 
 ##### *Alignment - STAR*
