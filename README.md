@@ -41,6 +41,7 @@ To be continued...
 ## B - PROCESSING 
 ##### *Alignment - STAR*
 1 - Build STAR
+- gtf file needed
 ```py
 build_STAR_index.sh
 ```
