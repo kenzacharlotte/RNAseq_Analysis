@@ -40,6 +40,14 @@ To be continued...
 
 ## B - PROCESSING 
 ##### *Alignment - STAR*
+1 - Build STAR
+```py
+build_STAR_index.sh
+```
+2 - Proceed to the alignment
+```py
+STAR_alignment.sh
+```
 ##### *Counting features - HTSeqcount*
 
 ## C - Statistical analysis 
