@@ -8,16 +8,17 @@
 create_repository.sh
 ```
 ```
-project_name/  
-📁 raw_data/             – fichiers bruts (.fastq.gz)  
-📁 trimmed_data/         – fichiers après trimming  
-📁 fastqc_results/       – résultats FastQC  
-   📁 raw/               – FastQC sur fichiers bruts  
-       📁 md5sum/        – md5sum files check and copied  
+project_name/
+📁 1.raw_data/             – raw data (.fq.gz)
+   📁 md5sum/        – md5sum files check and copied
+   📁 trimmed_data/         – fastq after trimming -optionnal (.fq.gz)
+📁 2.fastqc_results/       – fastQC results (html)
    📁 trimmed/           – FastQC sur fichiers trimmed  
-📁 multiqc_results/      – résultats MultiQC  
-📁 logs/                 – fichiers log  
-📁 scripts/              – scripts bash / Python
+📁 3.star/
+   📁 bam/               – fichiers log                 
+📁 4.featurecounts/        – featurecounts results (txt)  
+📁 logs/                 – fichiers log
+📁 scripts/              – scripts bash 
 ```
 ##### *Md5sum*
 ```py
@@ -48,6 +49,18 @@ build_STAR_index.sh
 ```py
 STAR_alignment.sh
 ```
-##### *Counting features - HTSeqcount*
+##### *Counting features - featurecounts*
+1 - Sort bam
 
-## C - Statistical analysis 
+```py
+sort_bam.sh
+```
+```py
+featurecounts.sh
+```
+## C - R analysis with Deseq2
+- Exploring Dataset
+- Create Deseq object
+- Visualization
+- DEgs identification
+- Pathways identification
