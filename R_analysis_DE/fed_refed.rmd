@@ -1,0 +1,196 @@
+---
+title: "FedRefed.rmd"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### I - Loading
+
+#### 1 - Libraries
+
+```{r}
+#================================ Loading libraries ================================= #
+#updateR() 
+library("DESeq2")
+library("ggplot2")
+library("ggrepel")
+library("readxl")
+library("tidyr")
+library("dplyr")
+library("stringr")
+```
+
+#### 2 - Loading featurecounts table
+
+```{r}
+#================================ Spot checking================================= #
+# Example for KO check expression : 
+fc <- read.delim("/home/kenza/data/MetID_2/featurecounts.txt", comment.char = "#", check.names = FALSE)
+rownames(fc) <- fc$Geneid
+head(fc)
+```
+
+```{r}
+# Keep only the counts from featurecounts
+rawcounts <- fc[, -(1:6)]
+rawcounts <- as.matrix(rawcounts)
+storage.mode(rawcounts) <- "numeric"
+bam_names <- colnames(fc)[-(1:6)] # gives bam names
+sample_names <- str_extract(string = bam_names, pattern = '\\d{1,2}')
+colnames(rawcounts) <- sample_names
+
+# Remove NA values from rawcounts table
+rawcounts <- na.omit(rawcounts)
+
+# How many reads do I have per sample? 
+colSums(rawcounts)
+```
+
+#### 3 - Create splan
+
+```{r}
+splan <- read_excel("MetID_Exp2_sample_plan.xlsx")
+splan <- as.data.frame(splan)
+colnames(splan) <- splan[4,]
+splan <- splan[-(1:4),]
+rownames(splan) <- splan$sample
+splan
+```
+
+```{r}
+# Control Splan !
+# Make sure that rownames in colData are matching with column names in rawcounts 
+all((colnames(rawcounts)) %in% rownames(splan))
+# Are they in the same order ?
+splan <- splan[(colnames(rawcounts)),]
+all((colnames(rawcounts)) == rownames(splan))
+colours <- splan$color
+```
+
+### II - Visualize
+
+#### Raw counts
+
+```{r}
+l2_rawcounts <-data.frame(log2(1+rawcounts))
+
+# convert wide to long
+plotDat <- gather(l2_rawcounts, "x", "y")
+
+# then plot, and rotate labels 90 degrees.
+boxplot_l2raw <- ggplot(plotDat, aes(x, y)) +
+  geom_boxplot() +
+  scale_fill_manual(values=c) +
+  xlab("") +
+  ylab("log2 rawcounts")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+
+ggsave("images/boxplot_l2rawcounts.png",width = 10, height = 4)
+```
+
+#### Library size
+
+```{r}
+libsize <- data.frame(name = colnames(rawcounts),value = (colSums(rawcounts)))
+libsize
+ggplot(libsize, aes(name,value)) +
+  geom_bar(stat = "identity")+
+  xlab("") +
+  ylab("total counts")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  ggtitle("Library size")
+ggsave("images/barplot_libsize.png",width = 10, height = 4)
+```
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = rawcounts, colData = splan, design = ~ treatment)
+dds <- estimateSizeFactors(dds)
+vsd <- vst(dds, blind = TRUE)
+rld <- rlog(dds)
+```
+
+#### 1 - PCA rlog or vst ? - overall
+
+```{r}
+PCArld <- plotPCA(rld, intgroup='genotype', returnData=TRUE, ntop = 1000)
+percentVar <- round(100 * attr(PCArld, "percentVar"))
+pca_overall <- ggplot(PCArld, aes(x=PC1, y=PC2))+
+  geom_point(aes(shape=genotype,color=treatment) ,size = 2.5)+
+  scale_shape_manual(values=c(15, 19))+
+  scale_color_manual(values = c("#e31a1c", "gray28", "#fecc5c","#fd8d3c","#ffffb2"))+
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance"))+
+  ggtitle("overall PCA - rlog normalization")
+pca_overall
+ggsave("images/overall_pca-rld.png")
+```
+
+```{r}
+PCAvst <- plotPCA(vsd, intgroup='genotype', returnData=TRUE, ntop = 1000)
+percentVar <- round(100 * attr(PCAvst, "percentVar"))
+pca_overall <- ggplot(PCAvst, aes(x=PC1, y=PC2))+
+  geom_point(aes(shape=genotype,color=treatment) ,size = 2.5)+
+  scale_shape_manual(values=c(15, 19))+
+  scale_color_manual(values = c("#e31a1c", "gray28", "#fecc5c","#fd8d3c","#ffffb2"))+
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance"))+
+  ggtitle("overall PCA - vst normalization")
+pca_overall
+ggsave("images/overall_pca-vst.png")
+```
+
+```{r}
+# Sorting dataset by genotype 
+splanko <- splan[splan$genotype=='ko',]
+splanwt<- splan[splan$genotype=='wt',]
+
+rawcountsko <- rawcounts[,splanko$sample]
+rawcountswt <- rawcounts[,splanwt$sample]
+
+# WT - PCA
+ddswt <- DESeqDataSetFromMatrix(countData = rawcountswt, colData = splanwt, design = ~ treatment)
+ddswt <- estimateSizeFactors(ddswt)
+vsdwt <- vst(ddswt, blind = TRUE)
+rldwt <- rlog(ddswt)
+```
+
+```{r}
+PCAwt <- plotPCA(vsdwt, intgroup='treatment', returnData=TRUE, ntop = 1000)
+percentVar <- round(100 * attr(PCAwt, "percentVar"))
+pca_wt <- ggplot(PCAwt, aes(x=PC1, y=PC2,color=treatment))+
+  geom_point(size=2, stroke =1)+
+  scale_color_manual(values = c("#e31a1c", "gray28", "#fecc5c","#fd8d3c","#ffffb2"))+
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance"))+
+  ggtitle("Wildtype PCA - vst normalization")
+
+pca_wt
+ggsave("images/wt_pca-vst.png")
+```
+
+```{r}
+# KO -PCA
+ddsko <- DESeqDataSetFromMatrix(countData = rawcountsko, colData = splanko, design = ~ treatment)
+ddsko <- estimateSizeFactors(ddsko)
+vsdko <- vst(ddsko)
+rldko <- rlog(ddsko)
+```
+
+```{r}
+PCAko <- plotPCA(rldko, intgroup='treatment', returnData=TRUE, ntop = 1000)
+percentVar <- round(100 * attr(PCAko, "percentVar"))
+pca_ko <- ggplot(PCAko, aes(x=PC1, y=PC2,color=treatment))+
+   geom_point(size=2, stroke =1)+
+  scale_color_manual(values = c("#e31a1c", "gray28", "#fecc5c","#fd8d3c","#ffffb2"))+
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance"))+
+  ggtitle("PCA ko - rlog normalization")
+
+pca_ko
+ggsave("images/ko_pca-rlog.png")
+```
